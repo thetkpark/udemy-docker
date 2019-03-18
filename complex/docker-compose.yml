@@ -1,10 +1,17 @@
 version: '3'
 services: 
-  postgres:
+  postgres: #postgres db
     image: 'postgres:latest'
-  redis:
+  redis: #redis
     image: 'redis:latest'
-  server:
+  nginx: #nginx
+    restart: always
+    build:
+      dockerfile: Dockerfile.dev
+      context: ./nginx
+    ports:
+      - '3050:80'
+  api: #express
     build: 
       dockerfile: Dockerfile.dev
       context: ./server
@@ -19,14 +26,14 @@ services:
       - PGDATABASE=postgres
       - PGPASSWORD=postgres_password
       - PGPORT=5432
-  client: 
+  client: #react
     build:
       dockerfile: Dockerfile.dev
       context: ./client
     volumes: 
       - /app/node_modules
       - ./client:/app
-  worker: 
+  worker: #node that cal fibo
     build:
       dockerfile: Dockerfile.dev
       context: ./worker
