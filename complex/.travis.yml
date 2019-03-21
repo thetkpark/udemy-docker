@@ -1,0 +1,23 @@
+sudo: required
+services: 
+  - docker
+
+before_install: 
+  - docker build -t thetkpark/react-test -f ./client/Dockerfile.dev ./client
+
+script: 
+  - docker run thetkpark/react-test npm test -- --coverage
+
+after_success: 
+  #Build docker image
+  - docker build -t thetkpark/multi-client ./client
+  - docker build -t thetkpark/multi-nginx ./nginx
+  - docker build -t thetkpark/multi-server ./server
+  - docker build -t thetkpark/multi-worker ./worker
+  # Login to Docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take these image and push to docker hub
+  - docker push thetkpark/multi-client
+  - docker push thetkpark/multi-nginx
+  - docker push thetkpark/multi-server
+  - docker push thetkpark/multi-worker
