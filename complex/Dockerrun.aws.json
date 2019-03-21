@@ -3,8 +3,8 @@
     "containerDefinitions": [
         {
             "name": "client",
-            "image": "thetkpark/multi-client",
-            "hostname": "client",
+            "image": "thetkpark/multi-client", 
+            "hostname": "client", 
             "essential": false
         },
         {
