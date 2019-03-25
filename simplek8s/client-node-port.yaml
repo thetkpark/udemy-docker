@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata: 
+  name: client-node-port
+spec:
+  type: NodePort
+  ports:  
+    - port: 3050 #port for another pod to connect
+      targetPort: 3000 #target (client container)
+      nodePort: 31515 #access from brower
+  selector:
+    component: web
